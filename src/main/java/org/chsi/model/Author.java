@@ -2,12 +2,14 @@ package org.chsi.model;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.*;
+import org.springframework.util.StringUtils;
 
 import java.io.Serializable;
 
 /**
  * Created by chsi on 20/01/2018.
  */
+
 
 @Data
 @RequiredArgsConstructor(staticName = "of")
@@ -21,4 +23,8 @@ public class Author implements Serializable {
     @NonNull
     private final String name;
 
+    public Author() {
+        this.firstname = "";
+        this.name = "";
+    }
 }

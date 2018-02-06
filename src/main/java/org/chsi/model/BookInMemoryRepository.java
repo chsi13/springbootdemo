@@ -4,6 +4,7 @@ import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.util.*;
 import java.util.function.Predicate;
@@ -12,7 +13,7 @@ import java.util.stream.Collectors;
 /**
  * Created by chsi on 19/01/2018.
  */
-@Component
+@Repository
 public class BookInMemoryRepository implements BookRepository {
 
     private static Logger logger = LoggerFactory.getLogger(BookInMemoryRepository.class);

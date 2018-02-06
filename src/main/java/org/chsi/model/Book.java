@@ -1,6 +1,8 @@
 package org.chsi.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import org.springframework.hateoas.ResourceSupport;
 
 import java.io.Serializable;
 
@@ -10,7 +12,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @EqualsAndHashCode(exclude = {"title","author", "price", "description"})
 @ToString(includeFieldNames = true)
-public class Book extends ResourceS implements Serializable {
+public class Book extends ResourceSupport implements Serializable {
 
     @Getter
     private String isbn;
@@ -18,6 +20,7 @@ public class Book extends ResourceS implements Serializable {
     @Getter
     private String title;
 
+    @JsonIgnore
     @Getter
     private Author author;
 

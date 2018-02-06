@@ -1,5 +1,5 @@
 package org.chsi.rest.endpoint;
-
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
 import org.chsi.model.Book;
 import org.chsi.model.BookInMemoryRepository;
 import org.chsi.model.BookRepository;
@@ -32,12 +32,15 @@ public class BookController {
     @Autowired
     private BookRepository bookRepository;
 
-    @RequestMapping(value = "/books/{isbn}", method = GET)
+    @GetMapping(value = "/books/{isbn}")
     public Book getBookByIsbn(@PathVariable("isbn") String isbn) {
-        return bookRepository.find(isbn).orElseThrow(NotFoundException::new);
+        Book found = bookRepository.find(isbn).orElseThrow(NotFoundException::new);
+        found.add(linkTo(methodOn(BookController.class).getBookByIsbn(isbn)).withSelfRel());
+        found.add(linkTo(methodOn(AuthorController.class).getAuthor(found.getAuthor().getName())).withRel("author"));
+        return found;
     }
 
-    @RequestMapping("/books")
+    @GetMapping("/books")
     public Collection<Book> findByTitle(@RequestParam(value = "title", required =  false) String title, @RequestParam(value = "author", required = false) String author) {
         if(!StringUtils.isEmpty(title))
             return bookRepository.findByTitle(title);
@@ -46,12 +49,8 @@ public class BookController {
         return Collections.emptyList();
     }
 
-    @RequestMapping("/categories")
-    public Collection<Category> categories() {
-        return Arrays.stream(Category.values()).collect(Collectors.toList());
-    }
 
-    @RequestMapping(value = "/books" ,method = POST)
+    @PostMapping(value = "/books")
     public ResponseEntity addBook(@RequestBody Book book) {
         book = bookRepository.add(book);
         URI location = ServletUriComponentsBuilder
